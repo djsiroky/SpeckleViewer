@@ -23,7 +23,7 @@ window.camLoc = {}
 
 // If there's no "dev" keyword in the url, set the serverUrl from window.location.origin
 if ( !window.location.href.includes( 'dev' ) )
-  window.SpkAppConfig.serverUrl = window.location.origin + '/api'
+  window.SpkAppConfig.serverUrl = window.location.origin + '/api/v1/'
 // ELSE
 // we will go forward and use the one provided in the dist/config.js file.
 
