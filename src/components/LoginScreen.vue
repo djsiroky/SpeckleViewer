@@ -49,15 +49,14 @@ export default {
         if( this.password === '' ) return
           this.$http.post( window.SpkAppConfig.serverUrl + '/accounts/login' , { email: this.email, password: this.password })
             .then( response => {
-              console.log(response.data)
               if( response.data.success == false ) throw new Error( 'Failed to login.' )
               localStorage.setItem( 'userJwtToken', JSON.stringify( response.data.resource.token) )
               return this.$http.get( window.SpkAppConfig.serverUrl + '/accounts', { headers: { 'Authorization' : response.data.resource.token } } )
             })
               .then( response => {
-                localStorage.setItem( 'userAccount', JSON.stringify( response.data ) )
+                localStorage.setItem( 'userAccount', JSON.stringify( response.data.resource ) )
                 let args = { guest: false }
-                this.$emit( 'success', { guest: false, account: response.data } )
+                this.$emit( 'success', { guest: false, account: response.data.resource } )
               })
                 .catch( err => {
                   console.warn(err)

@@ -147,7 +147,7 @@ export default {
     },
     getStreams(){
       var jwtToken = localStorage.getItem( 'userJwtToken' )
-      this.$http.get(window.SpkAppConfig.serverUrl + '/accounts/streams',{
+      this.$http.get(window.SpkAppConfig.serverUrl + '/streams',{
         headers: {
           Authorization: JSON.parse( jwtToken )
         }})
@@ -169,7 +169,7 @@ export default {
         var jwtToken = localStorage.getItem( 'userJwtToken' )
         if ( !jwtToken || jwtToken == '' )
           throw new Error( 'no login details found' )
-        return this.$http.get( window.SpkAppConfig.serverUrl + '/accounts/profile', {
+        return this.$http.get( window.SpkAppConfig.serverUrl + '/accounts', {
           headers: {
             Authorization: JSON.parse( jwtToken )
           }
