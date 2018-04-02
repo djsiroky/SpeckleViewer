@@ -11,6 +11,7 @@
           <label>Password</label>
           <md-input type='password' v-model='password'></md-input>
         </md-field>
+        <!-- <input @keyup.enter='login'> -->
         <md-button class='md-primary md-raised' @click.native='login'>Login</md-button>
         <div v-show='loginError' class='login-error'>
           <br>
@@ -48,9 +49,10 @@ export default {
         if( this.password === '' ) return
           this.$http.post( window.SpkAppConfig.serverUrl + '/accounts/login' , { email: this.email, password: this.password })
             .then( response => {
+              console.log(response.data)
               if( response.data.success == false ) throw new Error( 'Failed to login.' )
-                localStorage.setItem( 'userJwtToken', JSON.stringify( response.data.token ) )
-              return this.$http.get( window.SpkAppConfig.serverUrl + '/accounts/profile', { headers: { 'Authorization' : response.data.token } } )
+              localStorage.setItem( 'userJwtToken', JSON.stringify( response.data.resource.token) )
+              return this.$http.get( window.SpkAppConfig.serverUrl + '/accounts', { headers: { 'Authorization' : response.data.resource.token } } )
             })
               .then( response => {
                 localStorage.setItem( 'userAccount', JSON.stringify( response.data ) )
@@ -58,6 +60,7 @@ export default {
                 this.$emit( 'success', { guest: false, account: response.data } )
               })
                 .catch( err => {
+                  console.warn(err)
                   this.loginError = true
                 })
     },
