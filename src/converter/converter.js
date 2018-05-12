@@ -197,8 +197,8 @@ export default {
   },
 
   Polyline( args, cb ) {
-    console.log(args.obj)
     let geometry = new THREE.Geometry( )
+    // console.log('Polylines args:', args)
     if ( !args.obj.value ) return console.warn( 'Strange polyline.' )
     if (args.obj.closed == true){
       args.obj.value.push.apply(args.obj.value,args.obj.value.slice(0,3))
@@ -212,10 +212,26 @@ export default {
   Polycurve( args, cb ) {
     for ( let i in args.obj.segments ) {
       let segment = args.obj.segments[ i ]
-      this.Polyline( { obj: segment.displayValue, layer: args.layer }, ( err, poly ) => {
-        if ( err ) return cb( err )
-        return cb( null, poly )
-      } )
+      switch (segment.type) {
+        case 'Polyline':
+          this.Polyline({ obj:segment, layer: args.layer }, (err, polyline) => {
+            if ( err ) return cb( err )
+            return cb( null, polyline )
+          })
+          break
+        case 'Arc':
+          this.Arc({ obj:segment, layer: args.layer }, (err, arc) => {
+            if ( err ) return cb( err )
+            return cb( null, arc)
+          })
+          break
+        case 'Curve':
+          console.log('Curve:', segment)
+          this.Curve({ obj:segment, layer: args.layer }, (err, curve) => {
+            if ( err ) return cb( err )
+            return cb( null, curve)
+          })
+      }
     }
   },
   Annotation( args, cb ) {
